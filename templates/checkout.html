@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Veroo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+        <div class="bg-white rounded-3xl shadow-lg p-8">
+            <div class="flex flex-wrap justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Buyurtmani yakunlash</h1>
+                    <p class="text-gray-600">Sizning savatingizdagi mahsulotlarni tekshiring va buyurtma bering.</p>
+                </div>
+                <a href="{% url 'cart' %}" class="text-blue-600 hover:underline">Savatga qaytish</a>
+            </div>
+
+            {% if cart_items %}
+            <div class="grid gap-8 lg:grid-cols-2">
+                <div class="space-y-4">
+                    {% for item in cart_items %}
+                    <div class="border rounded-2xl p-5 flex items-center gap-4">
+                        <div class="w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-box text-3xl text-gray-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-semibold text-gray-900">{{ item.product.name }}</h2>
+                            <p class="text-sm text-gray-600">{{ item.quantity }} x {{ item.product.price|floatformat:0 }} so'm</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="bg-gray-50 rounded-3xl p-6">
+                    <h3 class="text-xl font-bold mb-4">Buyurtma tafsilotlari</h3>
+                    <div class="flex justify-between mb-3">
+                        <span class="text-gray-700">Jami:</span>
+                        <span class="font-semibold text-gray-900">{{ total|floatformat:0 }} so'm</span>
+                    </div>
+
+                    <form method="post" class="space-y-4">
+                        {% csrf_token %}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Yetkazib berish manzili</label>
+                            <textarea name="address" rows="3" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500" placeholder="Manzilni kiriting..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">To'lov turi</label>
+                            <select name="payment_type" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
+                                <option value="cash">Naqt pul</option>
+                                <option value="card">Karta orqali</option>
+                                <option value="click">Click orqali</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-xl hover:bg-purple-700 transition-colors">
+                            Buyurtma berish
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-20">
+                <p class="text-gray-700 text-xl">Sizning savatingiz bo'sh. Buyurtma berish uchun avvalo mahsulot qo'shing.</p>
+                <a href="{% url 'home' %}" class="inline-flex items-center mt-6 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700">
+                    Bosh sahifaga qaytish
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
